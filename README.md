@@ -6,8 +6,13 @@ Overview-- TravelMate is an Android application built using Java and OSMDroid th
 This project demonstrates professional Android development practices including:
 
 **Current Location Tracking:** Easily find your current location on the map. 
+
 **Search Locations:** Enter any location name and mark it on the map. 
+
 **Route Calculation:** Calculate the route between your current location and searched destination. 
+
 **Distance & Duration:** Displays distance (km) and estimated duration (minutes) in a bottom sheet. 
+
 **Navigation Options:** Options for Walk, Cycle, Bike, and Car modes. 
+
 **Interactive Map:** Zoom and pan freely with multi-touch support.
