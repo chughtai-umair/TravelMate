@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- MapView fills whole screen -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Search Text Field - on top of map -->
+    <EditText
+        android:id="@+id/searchLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/hint_enter_location"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:textColor="#000000"
+        android:textColorHint="#666666"
+        android:padding="12dp"
+        android:background="@android:color/white"
+        android:elevation="8dp" />
+
+
+    <!-- Find Path Button - bottom right -->
+    <ImageButton
+        android:id="@+id/btnShowPath"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/ic_my_location"
+        android:backgroundTint="@android:color/white"
+        android:src="@android:drawable/ic_menu_directions"
+        android:elevation="8dp"
+       />
+
+    <!-- My Location Button - bottom right -->
+    <ImageButton
+        android:id="@+id/btnMyLocation"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:backgroundTint="@android:color/white"
+        android:src="@android:drawable/ic_menu_mylocation"
+        android:contentDescription="@string/my_location"
+        android:elevation="8dp"
+        android:background="@drawable/ic_my_location" />
+
+    <include
+        layout="@layout/bottom_navigation_panel" />
+
+</FrameLayout>
