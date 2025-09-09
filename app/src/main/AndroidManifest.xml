@@ -19,15 +19,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Application_First">
 
-        <activity
-            android:name=".MainActivity"
+        <!-- Splash Screen as first screen -->
+        <activity android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main Map Activity -->
+        <activity
+            android:name=".MainActivity" />
+
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -81,9 +82,10 @@ public class MainActivity extends AppCompatActivity {
                 clearMap();
                 addMarker(current, "You are here");
                 addMarker(searchedPoint, "Destination");
-
                 // Draw minimum distance path initially
                 drawInitialRoute(current, searchedPoint);
+
+                bottomSheet.setVisibility(LinearLayout.VISIBLE);
             } else {
                 Toast.makeText(this, "Current or searched location missing", Toast.LENGTH_SHORT).show();
             }
@@ -119,7 +121,22 @@ public class MainActivity extends AppCompatActivity {
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
+
+        map.setMinZoomLevel(3.0);
+        map.setMaxZoomLevel(20.0);
+
+        BoundingBox boundingBox = new BoundingBox(
+                85.0,
+                180.0,
+                -85.0,
+                -180.0
+        );
+        map.setScrollableAreaLimitDouble(boundingBox);
+
         map.getController().setZoom(6.0);
+
+        LinearLayout bottomSheet = findViewById(R.id.bottomSheet);
+        bottomSheet.setVisibility(LinearLayout.GONE);
 
         locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         locationOverlay.enableMyLocation();
