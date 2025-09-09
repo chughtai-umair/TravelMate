@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#262626"
     android:gravity="center"
-    android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:orientation="vertical">
 
     <!-- App Icon -->
     <ImageView
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="TravelMate"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="34sp"
         android:textStyle="bold" />
 

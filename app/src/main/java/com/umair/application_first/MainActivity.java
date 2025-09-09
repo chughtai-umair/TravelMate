@@ -1,6 +1,7 @@
 package com.umair.application_first;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -31,6 +32,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,15 +42,14 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-
     private MapView map;
     private MyLocationNewOverlay locationOverlay;
     private Polyline roadOverlay;
     private GeoPoint searchedPoint;
     private Road currentRoad;
-    private ImageButton btnMyLocation, btnShowPath;
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
-    private List<Marker> markers = new ArrayList<>();
+    private final List<Marker> markers = new ArrayList<>();
+    private RadiusMarkerClusterer markerClusterer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
         ImageButton btnBike = findViewById(R.id.btnBike);
         ImageButton btnCar = findViewById(R.id.btnCar);
 
-        btnMyLocation = findViewById(R.id.btnMyLocation);
-        btnShowPath = findViewById(R.id.btnShowPath);
+        ImageButton btnMyLocation = findViewById(R.id.btnMyLocation);
+        ImageButton btnShowPath = findViewById(R.id.btnShowPath);
 
         LinearLayout bottomSheet = findViewById(R.id.bottomSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -140,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
 
         locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         locationOverlay.enableMyLocation();
+
+        // ✅ Marker clusterer initialize
+        markerClusterer = new RadiusMarkerClusterer(this);
+        markerClusterer.setRadius(100); // cluster radius (px)
+        map.getOverlays().add(markerClusterer);
     }
 
     private void showCurrentLocation() {
@@ -196,8 +202,10 @@ public class MainActivity extends AppCompatActivity {
                         // Only distance, no duration yet
                         String distanceText = String.format(Locale.getDefault(),
                                 "%.2f km", road.mLength);
+                        double durationMin = road.mLength / 40 * 60; // default car mode
+                        String formattedDuration = formatDuration(durationMin);
+                        showRouteInfo(distanceText, formattedDuration);
 
-                        showRouteInfo(distanceText);
                         map.invalidate();
                     }
                 });
@@ -208,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    // Call this whenever you recalculate route
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void updateDurationForMode(String mode, int iconResId, String title) {
         GeoPoint current = locationOverlay.getMyLocation();
         if (current == null || searchedPoint == null || currentRoad == null) return;
@@ -224,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         markers.add(currentMarker);
 
         // Recalculate duration based on mode
-        double distance = currentRoad.mLength; // use Road object
+        double distance = currentRoad.mLength; // in km
         double durationMin = 0;
 
         switch (mode) {
@@ -238,12 +248,31 @@ public class MainActivity extends AppCompatActivity {
                 durationMin = distance / 40 * 60; // 40 km/h approx
                 break;
         }
+        // ✅ Format duration properly
+        String formattedDuration = formatDuration(durationMin);
 
+        // ✅ Distance text
         String distanceText = String.format(Locale.getDefault(),
-                "%.2f km | %.0f min", distance, durationMin);
-        showRouteInfo(distanceText);
+                "%.2f km", distance);
+
+        showRouteInfo(distanceText, formattedDuration );
     }
 
+    // Utility function for formatting
+    private String formatDuration(double durationMin) {
+        int totalMinutes = (int) durationMin;
+        int days = totalMinutes / (24 * 60);
+        int hours = (totalMinutes % (24 * 60)) / 60;
+        int minutes = totalMinutes % 60;
+
+        if (days > 0) {
+            return days + " days, " + hours + " hours, " + minutes + " mins";
+        } else if (hours > 0) {
+            return hours + " hours, " + minutes + " mins";
+        } else {
+            return minutes + " mins";
+        }
+    }
 
     private void removeCurrentMarkers() {
         List<Marker> toRemove = new ArrayList<>();
@@ -257,9 +286,12 @@ public class MainActivity extends AppCompatActivity {
         map.invalidate();
     }
 
-    private void showRouteInfo(String distanceText) {
+    @SuppressLint("SetTextI18n")
+    private void showRouteInfo(String distanceText, String formatDuration ) {
         TextView tvDistance = findViewById(R.id.tvDistance);
+        TextView tvDuration2 = findViewById(R.id.tvDistance2);
         tvDistance.setText("Distance: " + distanceText);
+        tvDuration2.setText("Duration: " + formatDuration);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
@@ -272,6 +304,17 @@ public class MainActivity extends AppCompatActivity {
         markers.add(marker);
         map.invalidate();
     }
+
+    private void addCurrentMarker(GeoPoint point, String title) {
+        Marker marker = new Marker(map);
+        marker.setPosition(point);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setTitle(title);
+        map.getOverlays().add(marker);
+        markers.add(marker);
+        map.invalidate();
+    }
+
 
     private void clearMap() {
         if (roadOverlay != null) map.getOverlays().remove(roadOverlay);

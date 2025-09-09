@@ -2,7 +2,6 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -13,7 +12,9 @@
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+    </org.osmdroid.views.MapView>
 
     <!-- Search Text Field - on top of map -->
     <EditText
@@ -21,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:autofillHints=""
         android:hint="@string/hint_enter_location"
         android:inputType="text"
         android:imeOptions="actionSearch"
@@ -32,6 +34,8 @@
 
 
     <!-- Find Path Button - bottom right -->
+
+    <!-- My Location Button - bottom right -->
     <ImageButton
         android:id="@+id/btnShowPath"
         android:layout_width="48dp"
@@ -41,11 +45,10 @@
         android:layout_marginBottom="80dp"
         android:background="@drawable/ic_my_location"
         android:backgroundTint="@android:color/white"
-        android:src="@android:drawable/ic_menu_directions"
         android:elevation="8dp"
-       />
+        android:src="@android:drawable/ic_menu_directions"
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
-    <!-- My Location Button - bottom right -->
     <ImageButton
         android:id="@+id/btnMyLocation"
         android:layout_width="48dp"

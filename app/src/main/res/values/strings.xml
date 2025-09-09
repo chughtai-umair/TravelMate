@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Application_First</string>
     <string name="hint_enter_location">Enter location</string>
+    <string name="start">Start</string>
+    <string name="start_direction">Start Direction</string>
+    <string name="direction">Direction</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,10 +9,10 @@
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:orientation="vertical"
-        android:background="@android:color/white"
+        android:layout_height="wrap_content"
+        android:background="#DBDBDB"
         android:elevation="8dp"
+        android:orientation="vertical"
         android:padding="15dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -21,55 +22,117 @@
             android:layout_width="40dp"
             android:layout_height="6dp"
             android:layout_gravity="center"
-            android:background="@drawable/handle_bg"
             android:layout_marginBottom="8dp"
-            android:alpha="0.5"/>
+            android:alpha="0.5"
+            android:background="@drawable/handle_bg" />
 
         <!-- Distance Text -->
         <TextView
             android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
             android:text="Distance: 0 km"
-            android:textColor="#0290F6"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textColor="#385D76"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
         <!-- Transport Options -->
+
+        <TextView
+            android:id="@+id/tvDistance2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:forceHasOverlappingRendering="false"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
+            android:text="Duration: 00 h, 00m, 00s"
+            android:textColor="#385D76"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
         <LinearLayout
-            android:layout_width="382dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center|end"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btnWalk"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Walk"
-                android:src="@drawable/ic_walk" />
+            <LinearLayout
+                android:layout_width="220dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:gravity="center"
+                android:orientation="horizontal"
+                tools:ignore="RtlHardcoded">
 
-            <ImageButton
-                android:id="@+id/btnBike"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Bike"
-                android:src="@drawable/ic_bike" />
+                <ImageButton
+                    android:id="@+id/btnWalk"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_bg"
+                    android:contentDescription="Walk"
+                    android:foregroundGravity="center"
+                    android:src="@drawable/ic_walk"
+                    app:tint="#385D76"
+                    tools:ignore="HardcodedText" />
 
-            <ImageButton
-                android:id="@+id/btnCar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Car"
-                android:src="@drawable/ic_car" />
+                <ImageButton
+                    android:id="@+id/btnBike"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rounded_bg"
+                    android:contentDescription="Bike"
+                    android:src="@drawable/ic_bike"
+                    app:tint="#385D76"
+                    tools:ignore="HardcodedText" />
+
+                <ImageButton
+                    android:id="@+id/btnCar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rounded_bg"
+                    android:contentDescription="Car"
+                    android:src="@drawable/ic_car"
+                    app:tint="#385D76"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_bg"
+                    android:backgroundTint="#385D76"
+                    android:gravity="center"
+                    android:text="@string/start"
+                    android:textColor="#385D76"
+                    android:textColorHighlight="#BDBDBD"
+                    android:textColorHint="#BDBDBD"
+                    android:textColorLink="#BDBDBD"
+                    android:textSize="16sp"
+                    tools:ignore="InefficientWeight" />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
