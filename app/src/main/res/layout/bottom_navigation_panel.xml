@@ -114,22 +114,21 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@drawable/rounded_bg"
-                    android:backgroundTint="#385D76"
                     android:gravity="center"
                     android:text="@string/start"
-                    android:textColor="#385D76"
-                    android:textColorHighlight="#BDBDBD"
-                    android:textColorHint="#BDBDBD"
-                    android:textColorLink="#BDBDBD"
+                    android:textColor="#BDBDBD"
                     android:textSize="16sp"
+                    app:backgroundTint="#385D76"
+                    app:cornerRadius="10dp"
                     tools:ignore="InefficientWeight" />
+
+
             </LinearLayout>
         </LinearLayout>
 

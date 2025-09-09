@@ -3,9 +3,12 @@ package com.umair.application_first;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -49,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private Road currentRoad;
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
     private final List<Marker> markers = new ArrayList<>();
-    private RadiusMarkerClusterer markerClusterer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +83,21 @@ public class MainActivity extends AppCompatActivity {
             GeoPoint current = locationOverlay.getMyLocation();
             if (current != null && searchedPoint != null) {
                 clearMap();
-                addMarker(current, "You are here");
+
+                // ✅ Cluster markers
+                Marker marker = new Marker(map);
+                marker.setPosition(current);
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                marker.setTitle("You are here");
+                marker.setIcon(getResources().getDrawable(R.drawable.ic_marker_location));
+                map.getOverlays().add(marker);
+                markers.add(marker);
+                // default marker
                 addMarker(searchedPoint, "Destination");
-                // Draw minimum distance path initially
                 drawInitialRoute(current, searchedPoint);
 
                 bottomSheet.setVisibility(LinearLayout.VISIBLE);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             } else {
                 Toast.makeText(this, "Current or searched location missing", Toast.LENGTH_SHORT).show();
             }
@@ -117,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
-
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void initializeMap() {
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -142,17 +153,30 @@ public class MainActivity extends AppCompatActivity {
         locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         locationOverlay.enableMyLocation();
 
-        // ✅ Marker clusterer initialize
-        markerClusterer = new RadiusMarkerClusterer(this);
-        markerClusterer.setRadius(100); // cluster radius (px)
+        Bitmap personIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_marker_location);
+        locationOverlay.setPersonIcon(personIcon);
+
+        // ✅ Cluster markers
+        RadiusMarkerClusterer markerClusterer = new RadiusMarkerClusterer(this);
+        markerClusterer.setRadius(100);
         map.getOverlays().add(markerClusterer);
     }
-
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void showCurrentLocation() {
         GeoPoint currentLocation = locationOverlay.getMyLocation();
         if (currentLocation != null) {
             removeCurrentMarkers();
-            addMarker(currentLocation, "You are here");
+
+            // 🔹 Custom marker icon for "You are here"
+            Marker marker = new Marker(map);
+            marker.setPosition(currentLocation);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marker.setTitle("You are here");
+
+            marker.setIcon(getResources().getDrawable(R.drawable.ic_marker_location));
+            map.getOverlays().add(marker);
+            markers.add(marker);
+
             map.getController().setZoom(15.0);
             map.getController().animateTo(currentLocation);
         } else {
@@ -199,10 +223,11 @@ public class MainActivity extends AppCompatActivity {
                         roadOverlay = RoadManager.buildRoadOverlay(road);
                         map.getOverlays().add(roadOverlay);
 
-                        // Only distance, no duration yet
+//                        // Only distance, no duration yet
                         String distanceText = String.format(Locale.getDefault(),
                                 "%.2f km", road.mLength);
-                        double durationMin = road.mLength / 40 * 60; // default car mode
+
+                        double durationMin = road.mLength / 5 * 60; // default walk mode
                         String formattedDuration = formatDuration(durationMin);
                         showRouteInfo(distanceText, formattedDuration);
 
@@ -304,17 +329,6 @@ public class MainActivity extends AppCompatActivity {
         markers.add(marker);
         map.invalidate();
     }
-
-    private void addCurrentMarker(GeoPoint point, String title) {
-        Marker marker = new Marker(map);
-        marker.setPosition(point);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setTitle(title);
-        map.getOverlays().add(marker);
-        markers.add(marker);
-        map.invalidate();
-    }
-
 
     private void clearMap() {
         if (roadOverlay != null) map.getOverlays().remove(roadOverlay);
